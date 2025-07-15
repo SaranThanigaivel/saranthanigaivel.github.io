@@ -4,29 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saran Thanigaivel - Senior Software Developer</title>
+    <link rel="icon" type="image/png" href="http://googleusercontent.com/file_content/1">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Dark Slate & Vibrant Accents -->
-    <!-- Application Structure Plan: The SPA is designed as an interactive portfolio. It starts with a hero section for immediate identification, followed by a detailed, interactive experience section with a Chart.js-powered visual breakdown to allow non-linear exploration. This is followed by a high-impact KPI dashboard. This structure is chosen to lead with the most substantial content (detailed experience) and then reinforce it with quantifiable successes. -->
-    <!-- Visualization & Content Choices: Key metrics are presented as stat cards for immediate impact. Experience is visualized using a Chart.js Donut chart to show the proportion of work across Security, Performance, and Feature Development. Clicking chart segments filters the detailed experience list, connecting high-level data to specific accomplishments. This interaction is chosen to make the dense information in the resume more digestible and engaging. All visuals are built with HTML/CSS or Canvas, avoiding SVG/Mermaid. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
+        :root {
+            --bg-primary: #fdf6f0;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --accent-1: #ff7f50;
+            --accent-2: #87ceeb;
+            --chart-border: #fdf6f0;
+        }
+
+        html.dark {
+            --bg-primary: #1a1410;
+            --bg-secondary: #2a2320;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent-1: #f43f5e;
+            --accent-2: #f59e0b; /* Amber for dark mode */
+            --chart-border: #0f172a;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* slate-900 */
-            color: #cbd5e1; /* slate-300 */
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .kpi-card, .skills-card, .list-item-default {
-            background-color: #1e293b; /* slate-800 */
-            border: 1px solid #334155; /* slate-700 */
+        .card, .list-item-default {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-        .kpi-card:hover {
+        .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            border-color: #475569; /* slate-600 */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
         }
         .chart-container {
             position: relative;
@@ -39,20 +59,16 @@
         }
         .cve-link {
             font-weight: 500;
-            color: #60a5fa; /* blue-400 */
+            color: var(--accent-2);
             text-decoration: underline;
-            text-decoration-color: #3b82f6; /* blue-500 */
         }
         .cve-link:hover {
-            text-decoration-color: #60a5fa; /* blue-400 */
+            color: var(--accent-1);
         }
-        li[style*="color: rgb(255, 255, 255)"] .cve-link {
-            color: #ffffff;
-            text-decoration-color: #93c5fd; /* blue-300 */
+        li[style*="background-color"] .cve-link {
+            color: inherit;
         }
-        li[style*="color: rgb(255, 255, 255)"] .cve-link:hover {
-            text-decoration-color: #ffffff;
-        }
+        
         @media (max-width: 768px) {
             .chart-container {
                 height: 300px;
@@ -63,56 +79,64 @@
 </head>
 <body class="antialiased">
 
-    <header id="home" class="bg-slate-800/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm shadow-slate-900/20 border-b border-slate-700">
+    <header id="home" class="bg-[var(--bg-secondary)]/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm border-b border-[var(--border-color)]">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-slate-100">
+            <div class="text-2xl font-bold text-[var(--text-primary)]">
                 Saran Thanigaivel
             </div>
-            <div class="hidden md:flex space-x-6">
-                <a href="#about" class="text-slate-300 hover:text-white font-medium">About</a>
-                <a href="#experience" class="text-slate-300 hover:text-white font-medium">Experience</a>
-                <a href="#impact" class="text-slate-300 hover:text-white font-medium">Impact</a>
-                <a href="#skills" class="text-slate-300 hover:text-white font-medium">Skills</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">About</a>
+                <a href="#experience" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Experience</a>
+                <a href="#impact" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Impact</a>
+                <a href="#skills" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Skills</a>
+                <button id="theme-toggle" class="w-10 h-10 rounded-full flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--border-color)]">
+                    <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 7.072l.707-.707a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
             </div>
-            <div class="md:hidden">
-                <button id="menu-btn" class="text-slate-300 focus:outline-none">
+            <div class="md:hidden flex items-center">
+                 <button id="theme-toggle-mobile" class="w-10 h-10 rounded-full flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--border-color)] mr-2">
+                    <svg id="theme-toggle-dark-icon-mobile" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon-mobile" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 7.072l.707-.707a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
+                <button id="menu-btn" class="text-[var(--text-secondary)] focus:outline-none">
                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 px-6 pb-4 space-y-2">
-            <a href="#about" class="block text-slate-300 hover:text-white font-medium">About</a>
-            <a href="#experience" class="block text-slate-300 hover:text-white font-medium">Experience</a>
-            <a href="#impact" class="block text-slate-300 hover:text-white font-medium">Impact</a>
-            <a href="#skills" class="block text-slate-300 hover:text-white font-medium">Skills</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-[var(--bg-secondary)] px-6 pb-4 space-y-2">
+            <a href="#about" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">About</a>
+            <a href="#experience" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Experience</a>
+            <a href="#impact" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Impact</a>
+            <a href="#skills" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Skills</a>
         </div>
     </header>
 
     <main class="container mx-auto px-6 py-8 md:py-12">
         <section id="about" class="text-center mb-16 md:mb-24 pt-16 -mt-16">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-100 mb-4">Senior Software Developer</h1>
-            <p class="max-w-3xl mx-auto text-lg text-slate-400">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] mb-4">Senior Software Developer</h1>
+            <p class="max-w-3xl mx-auto text-lg text-[var(--text-secondary)]">
                 Specializing in backend development, database optimization, and robust application security. I deliver scalable, secure, and high-performance solutions by transforming complex challenges into elegant, efficient code.
             </p>
         </section>
 
         <section id="experience" class="mb-16 md:mb-24 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-center text-slate-100 mb-2">Professional Experience</h2>
-             <p class="text-center text-slate-400 mb-10">This section provides a visual summary of my work at Zoho, followed by a detailed list of accomplishments. You can click on the chart segments to filter the achievements by category, offering an interactive way to explore my contributions.</p>
+            <h2 class="text-3xl font-bold text-center text-[var(--text-primary)] mb-2">Professional Experience</h2>
+             <p class="text-center text-[var(--text-secondary)] mb-10">This section provides a visual summary of my work at Zoho, followed by a detailed list of accomplishments. You can click on the chart segments to filter the achievements by category.</p>
             <div class="flex flex-col lg:flex-row gap-12 items-start">
                 <div class="w-full lg:w-1/3 lg:sticky top-28">
                     <div class="chart-container">
                         <canvas id="achievementsChart"></canvas>
                     </div>
                      <p id="chart-helper" class="text-center text-sm text-slate-500 mt-4">Click a segment to highlight related achievements.</p>
-                     <button id="reset-filter" class="w-full mt-4 bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-500 transition-colors hidden">Show All Achievements</button>
+                     <button id="reset-filter" class="w-full mt-4 bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors hidden">Show All Achievements</button>
                 </div>
 
                 <div class="w-full lg:w-2/3">
                     <div class="space-y-8">
                         <div>
-                            <h3 class="text-2xl font-bold text-slate-100">Member Technical Staff</h3>
-                            <p class="text-md font-medium text-slate-400 mb-4">Zoho Corporation | Aug 2022 – Present</p>
+                            <h3 class="text-2xl font-bold text-[var(--text-primary)]">Member Technical Staff</h3>
+                            <p class="text-md font-medium text-[var(--text-secondary)] mb-4">Zoho Corporation | Aug 2022 – Present</p>
                             <ul id="experience-list-mts" class="space-y-3 list-inside">
                                 <li data-category="Security" class="list-item-default p-4 rounded-lg transition-all duration-300">Architected and integrated Role-Based Access Control (RBAC) and server-side SQL validation, eliminating 95% of unauthorized data access and successfully remediating critical vulnerabilities, including <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-40772" target="_blank" rel="noopener noreferrer" class="cve-link">CVE-2022-40772</a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-26600" target="_blank" rel="noopener noreferrer" class="cve-link">CVE-2023-26600</a>.</li>
                                 <li data-category="Performance" class="list-item-default p-4 rounded-lg transition-all duration-300">Optimized the core reporting engine by upgrading JasperReports, implementing column-level caching, and migrating bulky data formats to JSON, resulting in a 30–40% improvement in report generation time.</li>
@@ -123,8 +147,8 @@
                             </ul>
                         </div>
                         <div>
-                            <h3 class="text-2xl font-bold text-slate-100">Project Trainee</h3>
-                            <p class="text-md font-medium text-slate-400 mb-4">Zoho Corporation | Dec 2021 – Aug 2022</p>
+                            <h3 class="text-2xl font-bold text-[var(--text-primary)]">Project Trainee</h3>
+                            <p class="text-md font-medium text-[var(--text-secondary)] mb-4">Zoho Corporation | Dec 2021 – Aug 2022</p>
                             <ul id="experience-list-trainee" class="space-y-3 list-inside">
                                 <li data-category="Performance" class="list-item-default p-4 rounded-lg transition-all duration-300">Optimized PostgreSQL queries and improved indexing efficiency across key modules, reducing average database response time by 35%.</li>
                                 <li data-category="Security" class="list-item-default p-4 rounded-lg transition-all duration-300">Secured internal modules by analyzing and patching 10+ vulnerability patterns (XSS, SQL Injection) and addressing 5+ critical threat vectors, including LDAP Injection, XSSI, and RCE, ensuring zero recurrence post-resolution.</li>
@@ -137,69 +161,69 @@
         </section>
 
         <section id="impact" class="mb-16 md:mb-24 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-center text-slate-100 mb-2">Key Career Impacts</h2>
-            <p class="text-center text-slate-400 mb-10">Quantifiable results delivered through focused engineering efforts.</p>
+            <h2 class="text-3xl font-bold text-center text-[var(--text-primary)] mb-2">Key Career Impacts</h2>
+            <p class="text-center text-[var(--text-secondary)] mb-10">Quantifiable results delivered through focused engineering efforts.</p>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center">
-                <div class="kpi-card p-6 rounded-lg">
-                    <p class="text-4xl font-extrabold text-slate-100">95%</p>
-                    <p class="text-sm font-medium text-slate-400 mt-2">Reduction in Unauthorized Data Access</p>
+                <div class="card p-6 rounded-lg">
+                    <p class="text-4xl font-extrabold" style="color: #ff7f50;">95%</p>
+                    <p class="text-sm font-medium text-slate-500 mt-2">Reduction in Unauthorized Data Access</p>
                 </div>
-                <div class="kpi-card p-6 rounded-lg">
-                    <p class="text-4xl font-extrabold text-slate-100">40%</p>
-                    <p class="text-sm font-medium text-slate-400 mt-2">Improvement in Report Generation Time</p>
+                <div class="card p-6 rounded-lg">
+                    <p class="text-4xl font-extrabold" style="color: #87ceeb;">40%</p>
+                    <p class="text-sm font-medium text-slate-500 mt-2">Improvement in Report Generation Time</p>
                 </div>
-                <div class="kpi-card p-6 rounded-lg">
-                    <p class="text-4xl font-extrabold text-slate-100">70%</p>
-                    <p class="text-sm font-medium text-slate-400 mt-2">Reduction in Schema Migration Effort</p>
+                <div class="card p-6 rounded-lg">
+                    <p class="text-4xl font-extrabold" style="color: #ff7f50;">70%</p>
+                    <p class="text-sm font-medium text-slate-500 mt-2">Reduction in Schema Migration Effort</p>
                 </div>
-                <div class="kpi-card p-6 rounded-lg">
-                    <p class="text-4xl font-extrabold text-slate-100">280+</p>
-                    <p class="text-sm font-medium text-slate-400 mt-2">Critical Technical Issues Resolved</p>
+                <div class="card p-6 rounded-lg">
+                    <p class="text-4xl font-extrabold" style="color: #87ceeb;">280+</p>
+                    <p class="text-sm font-medium text-slate-500 mt-2">Critical Technical Issues Resolved</p>
                 </div>
             </div>
         </section>
 
-        <section id="skills" class="skills-card p-8 rounded-lg shadow-sm mb-16 md:mb-24 pt-16 -mt-16">
-             <h2 class="text-3xl font-bold text-center text-slate-100 mb-8">Technical Skillset</h2>
+        <section id="skills" class="card p-8 rounded-lg shadow-sm mb-16 md:mb-24 pt-16 -mt-16">
+             <h2 class="text-3xl font-bold text-center text-[var(--text-primary)] mb-8">Technical Skillset</h2>
              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold text-slate-200 mb-3">Languages</h3>
+                    <h3 class="text-xl font-bold text-[var(--text-primary)] mb-3">Languages</h3>
                     <div class="flex flex-wrap gap-2">
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Java</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">SQL</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Python</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">C</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">JavaScript</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Java</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">SQL</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Python</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">C</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">JavaScript</span>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold text-slate-200 mb-3">Databases & Core Skills</h3>
+                    <h3 class="text-xl font-bold text-[var(--text-primary)] mb-3">Databases & Core Skills</h3>
                     <div class="flex flex-wrap gap-2">
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">PostgreSQL</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">SQL Server</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">DSA</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">OOP</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Performance Tuning</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">PostgreSQL</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">SQL Server</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">DSA</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">OOP</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Performance Tuning</span>
                     </div>
                 </div>
                  <div>
-                    <h3 class="text-xl font-bold text-slate-200 mb-3">Frameworks & Tools</h3>
+                    <h3 class="text-xl font-bold text-[var(--text-primary)] mb-3">Frameworks & Tools</h3>
                     <div class="flex flex-wrap gap-2">
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">JasperReports</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Puppeteer</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Ember.js</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">REST APIs</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Git</span>
-                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">NGINX</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">JasperReports</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Puppeteer</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Ember.js</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">REST APIs</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Git</span>
+                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">NGINX</span>
                     </div>
                 </div>
              </div>
         </section>
     </main>
 
-    <footer class="bg-slate-800 mt-16 md:mt-24 border-t border-slate-700">
-        <div class="container mx-auto px-6 py-8 text-center text-slate-400">
-             <p class="text-lg font-bold text-slate-200 mb-2">Contact Me</p>
+    <footer class="bg-[var(--bg-secondary)] mt-16 md:mt-24 border-t border-[var(--border-color)]">
+        <div class="container mx-auto px-6 py-8 text-center text-[var(--text-secondary)]">
+             <p class="text-lg font-bold text-[var(--text-primary)] mb-2">Contact Me</p>
              <p>saranthanigaivel@gmail.com</p>
              <div class="mt-4">
                 <p>&copy; 2024 Saran Thanigaivel.</p>
@@ -207,31 +231,46 @@
         </div>
     </footer>
 
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const darkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
+            const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
+            const achievementsChartCtx = document.getElementById('achievementsChart').getContext('2d');
+            let achievementsChart;
+
             const achievementsData = {
                 labels: ['Security', 'Performance', 'Feature Development', 'Troubleshooting'],
                 datasets: [{
                     label: 'Achievement Focus',
                     data: [3, 2, 2, 2],
                     backgroundColor: [
-                        '#64748b', // slate-500
-                        '#3b82f6', // blue-500
-                        '#84cc16', // lime-500
-                        '#f43f5e'  // rose-500
+                        '#a1a1aa',   // Gray
+                        '#87ceeb',   // Sky Blue
+                        '#ff7f50',   // Sunset Orange
+                        '#d4d4d8'    // Light Gray
                     ],
-                    borderColor: '#0f172a', // slate-900
+                    highlightTextColor: [
+                        '#ffffff',   // White text on Gray
+                        '#1e293b',   // Dark text on Sky Blue
+                        '#ffffff',   // White text on Sunset Orange
+                        '#1e293b'    // Dark text on Light Gray
+                    ],
                     borderWidth: 4,
-                    hoverOffset: 12
                 }]
             };
 
-            const achievementsChartCtx = document.getElementById('achievementsChart').getContext('2d');
-            const achievementsChart = new Chart(achievementsChartCtx, {
-                type: 'doughnut',
-                data: achievementsData,
-                options: {
+            const createOrUpdateChart = () => {
+                const isDark = document.documentElement.classList.contains('dark');
+                const chartBorderColor = getComputedStyle(document.documentElement).getPropertyValue('--chart-border').trim();
+                const legendColor = isDark ? '#94a3b8' : '#475569';
+
+                achievementsData.datasets[0].borderColor = chartBorderColor;
+
+                const chartOptions = {
                     responsive: true,
                     maintainAspectRatio: false,
                     cutout: '60%',
@@ -240,38 +279,77 @@
                             position: 'bottom',
                             labels: {
                                 padding: 20,
-                                color: '#94a3b8', // slate-400
-                                font: {
-                                    size: 14,
-                                    family: 'Inter',
-                                }
+                                color: legendColor,
+                                font: { size: 14, family: 'Inter' }
                             }
                         },
                         tooltip: {
-                            bodyFont: {
-                                size: 14,
-                                family: 'Inter',
-                            },
-                            titleFont: {
-                                size: 16,
-                                family: 'Inter',
-                            },
+                            bodyFont: { size: 14, family: 'Inter' },
+                            titleFont: { size: 16, family: 'Inter' },
                             callbacks: {
                                 label: function(context) {
                                     let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += `${context.raw} achievements`;
-                                    }
+                                    if (label) { label += ': '; }
+                                    if (context.parsed !== null) { label += `${context.raw} achievements`; }
                                     return label;
                                 }
                             }
                         }
                     }
+                };
+
+                if (achievementsChart) {
+                    achievementsChart.options = chartOptions;
+                    achievementsChart.data.datasets[0].borderColor = chartBorderColor;
+                    achievementsChart.update();
+                } else {
+                    achievementsChart = new Chart(achievementsChartCtx, {
+                        type: 'doughnut',
+                        data: achievementsData,
+                        options: chartOptions
+                    });
                 }
-            });
+            };
+            
+            const updateChartTheme = () => {
+                createOrUpdateChart();
+            };
+
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
+                    darkIconMobile.classList.remove('hidden');
+                    lightIconMobile.classList.add('hidden');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    darkIcon.classList.add('hidden');
+                    lightIcon.classList.remove('hidden');
+                    darkIconMobile.classList.add('hidden');
+                    lightIconMobile.classList.remove('hidden');
+                }
+                updateChartTheme(theme);
+            };
+
+            const toggleTheme = () => {
+                const isDarkMode = document.documentElement.classList.toggle('dark');
+                const newTheme = isDarkMode ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            };
+
+            themeToggleBtn.addEventListener('click', toggleTheme);
+            themeToggleMobileBtn.addEventListener('click', toggleTheme);
+
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                applyTheme(systemPrefersDark ? 'dark' : 'light');
+            }
 
             const experienceItems = document.querySelectorAll('#experience-list-mts li, #experience-list-trainee li');
             const resetButton = document.getElementById('reset-filter');
@@ -279,7 +357,7 @@
             
             let activeFilter = null;
 
-            function filterAchievements(category, color) {
+            function filterAchievements(category, color, textColor) {
                 activeFilter = category;
                 experienceItems.forEach(item => {
                     const defaultClasses = 'list-item-default p-4 rounded-lg transition-all duration-300';
@@ -287,7 +365,7 @@
                         item.className = 'p-4 rounded-lg transition-all duration-300';
                         item.style.backgroundColor = color;
                         item.style.borderColor = color;
-                        item.style.color = '#ffffff';
+                        item.style.color = textColor;
                         item.style.transform = 'scale(1.01)';
                     } else {
                         item.className = defaultClasses;
@@ -321,11 +399,12 @@
                     const firstPoint = activePoints[0];
                     const label = achievementsChart.data.labels[firstPoint.index];
                     const color = achievementsChart.data.datasets[0].backgroundColor[firstPoint.index];
+                    const textColor = achievementsChart.data.datasets[0].highlightTextColor[firstPoint.index];
 
                     if (activeFilter === label) {
                         resetFilter();
                     } else {
-                        filterAchievements(label, color);
+                        filterAchievements(label, color, textColor);
                     }
                 }
             };
@@ -346,23 +425,16 @@
 
                     if (href && href.startsWith('#')) {
                         e.preventDefault();
-
                         const targetElement = document.querySelector(href);
-
                         if (targetElement) {
-                            targetElement.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
+                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }
-
                         if (!mobileMenu.classList.contains('hidden')) {
                             mobileMenu.classList.add('hidden');
                         }
                     }
                 });
             });
-
         });
     </script>
 </body>
