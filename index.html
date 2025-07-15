@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saran Thanigaivel - Senior Software Developer</title>
-    <link rel="icon" type="image/png" href="http://googleusercontent.com/file_content/1">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
+        /* CSS Variables for Theming */
         :root {
             --bg-primary: #fdf6f0;
             --bg-secondary: #ffffff;
@@ -20,225 +17,363 @@
             --accent-1: #ff7f50;
             --accent-2: #87ceeb;
             --chart-border: #fdf6f0;
+            --tag-bg: #f1f5f9;
+            --tag-text: #475569;
         }
 
-        html.dark {
+        body.dark-mode {
             --bg-primary: #1a1410;
             --bg-secondary: #2a2320;
             --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border-color: #334155;
+            --text-secondary: #a8a29e;
+            --border-color: #3c3531;
             --accent-1: #f43f5e;
-            --accent-2: #f59e0b; /* Amber for dark mode */
-            --chart-border: #0f172a;
+            --accent-2: #f59e0b;
+            --chart-border: #1a1410;
+            --tag-bg: #3c3531;
+            --tag-text: #d4cec9;
         }
 
+        /* General Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .card, .list-item-default {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+        section {
+            padding: 4rem 0;
+        }
+        h1 { font-size: 3rem; font-weight: 800; }
+        h2 { font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        p { line-height: 1.6; }
+
+        /* Header & Navigation */
+        .header {
+            background-color: color-mix(in srgb, var(--bg-secondary) 80%, transparent);
+            backdrop-filter: blur(4px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 5rem;
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .nav-links {
+            display: none; /* Hidden on mobile */
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .theme-toggle-btn, .mobile-menu-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .theme-toggle-btn:hover, .mobile-menu-btn:hover {
+            background-color: var(--border-color);
+        }
+        .mobile-menu {
+            display: none;
+            background-color: var(--bg-secondary);
+            padding: 1rem 0;
+        }
+        .mobile-menu a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        /* Main Content Sections */
+        .about-section { text-align: center; }
+        .about-section p { max-width: 48rem; margin: 1rem auto 0; font-size: 1.125rem; color: var(--text-secondary); }
+        .section-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 2.5rem; }
+        
+        .experience-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+        .chart-container-wrapper {
+            width: 100%;
         }
         .chart-container {
             position: relative;
-            width: 100%;
             max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
             height: 350px;
-            max-height: 400px;
+            margin: 0 auto;
         }
-        .cve-link {
+        .experience-details {
+            width: 100%;
+        }
+        .experience-list { list-style: none; }
+        .experience-list li {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .reset-filter-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: #475569;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+        }
+        .reset-filter-btn:hover { background-color: #334155; }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        .impact-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        .impact-card .value { font-size: 2.25rem; font-weight: 800; }
+        .impact-card .label { color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.875rem; }
+
+        .skills-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 4rem;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        .skills-grid h3 { margin-bottom: 0.75rem; }
+        .skills-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .skill-tag {
+            background-color: var(--tag-bg);
+            color: var(--tag-text);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
             font-weight: 500;
-            color: var(--accent-2);
-            text-decoration: underline;
         }
-        .cve-link:hover {
-            color: var(--accent-1);
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-secondary);
         }
-        li[style*="background-color"] .cve-link {
-            color: inherit;
+        .footer .contact-me { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+
+        /* Helpers */
+        .cve-link { font-weight: 500; color: var(--accent-2); text-decoration: underline; }
+        .cve-link:hover { color: var(--accent-1); }
+        .hidden { display: none !important; }
+
+        /* Responsive Styles */
+        @media (min-width: 768px) {
+            .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+            .mobile-menu-btn { display: none; }
+            .impact-grid { grid-template-columns: repeat(4, 1fr); }
+            .skills-grid { grid-template-columns: repeat(3, 1fr); }
         }
-        
-        @media (max-width: 768px) {
-            .chart-container {
-                height: 300px;
-                max-height: 350px;
-            }
+        @media (min-width: 1024px) {
+            .experience-layout { flex-direction: row; }
+            .chart-container-wrapper { width: 33.33%; position: sticky; top: 7rem; }
+            .experience-details { width: 66.67%; }
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <header id="home" class="bg-[var(--bg-secondary)]/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm border-b border-[var(--border-color)]">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-[var(--text-primary)]">
-                Saran Thanigaivel
-            </div>
-            <div class="hidden md:flex items-center space-x-6">
-                <a href="#about" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">About</a>
-                <a href="#experience" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Experience</a>
-                <a href="#impact" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Impact</a>
-                <a href="#skills" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Skills</a>
-                <button id="theme-toggle" class="w-10 h-10 rounded-full flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--border-color)]">
-                    <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                    <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 7.072l.707-.707a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-                </button>
-            </div>
-            <div class="md:hidden flex items-center">
-                 <button id="theme-toggle-mobile" class="w-10 h-10 rounded-full flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--border-color)] mr-2">
-                    <svg id="theme-toggle-dark-icon-mobile" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                    <svg id="theme-toggle-light-icon-mobile" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 7.072l.707-.707a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-                </button>
-                <button id="menu-btn" class="text-[var(--text-secondary)] focus:outline-none">
-                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
-        </nav>
-        <div id="mobile-menu" class="hidden md:hidden bg-[var(--bg-secondary)] px-6 pb-4 space-y-2">
-            <a href="#about" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">About</a>
-            <a href="#experience" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Experience</a>
-            <a href="#impact" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Impact</a>
-            <a href="#skills" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Skills</a>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav-logo">Saran Thanigaivel</div>
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#experience">Experience</a>
+                    <a href="#impact">Impact</a>
+                    <a href="#skills">Skills</a>
+                </div>
+                <div class="nav-buttons">
+                    <button id="theme-toggle" class="theme-toggle-btn">
+                        <svg id="theme-toggle-dark-icon" class="hidden" width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon" class="hidden" width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 7.072l.707-.707a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                    <button id="menu-btn" class="mobile-menu-btn">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </nav>
+        </div>
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="#about">About</a>
+            <a href="#experience">Experience</a>
+            <a href="#impact">Impact</a>
+            <a href="#skills">Skills</a>
         </div>
     </header>
 
-    <main class="container mx-auto px-6 py-8 md:py-12">
-        <section id="about" class="text-center mb-16 md:mb-24 pt-16 -mt-16">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] mb-4">Senior Software Developer</h1>
-            <p class="max-w-3xl mx-auto text-lg text-[var(--text-secondary)]">
-                Specializing in backend development, database optimization, and robust application security. I deliver scalable, secure, and high-performance solutions by transforming complex challenges into elegant, efficient code.
-            </p>
+    <main class="container">
+        <section id="about" class="about-section">
+            <h1>Senior Software Developer</h1>
+            <p>Specializing in backend development, database optimization, and robust application security. I deliver scalable, secure, and high-performance solutions by transforming complex challenges into elegant, efficient code.</p>
         </section>
 
-        <section id="experience" class="mb-16 md:mb-24 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-center text-[var(--text-primary)] mb-2">Professional Experience</h2>
-             <p class="text-center text-[var(--text-secondary)] mb-10">This section provides a visual summary of my work at Zoho, followed by a detailed list of accomplishments. You can click on the chart segments to filter the achievements by category.</p>
-            <div class="flex flex-col lg:flex-row gap-12 items-start">
-                <div class="w-full lg:w-1/3 lg:sticky top-28">
+        <section id="experience">
+            <h2>Professional Experience</h2>
+            <p class="section-subtitle">A visual summary of my work at Zoho. Click the chart segments to filter achievements by category.</p>
+            <div class="experience-layout">
+                <div class="chart-container-wrapper">
                     <div class="chart-container">
                         <canvas id="achievementsChart"></canvas>
                     </div>
-                     <p id="chart-helper" class="text-center text-sm text-slate-500 mt-4">Click a segment to highlight related achievements.</p>
-                     <button id="reset-filter" class="w-full mt-4 bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors hidden">Show All Achievements</button>
+                    <p style="text-align: center; font-size: 0.875rem; color: #64748b; margin-top: 1rem;">Click a segment to highlight related achievements.</p>
+                    <button id="reset-filter" class="reset-filter-btn">Show All Achievements</button>
                 </div>
-
-                <div class="w-full lg:w-2/3">
-                    <div class="space-y-8">
-                        <div>
-                            <h3 class="text-2xl font-bold text-[var(--text-primary)]">Member Technical Staff</h3>
-                            <p class="text-md font-medium text-[var(--text-secondary)] mb-4">Zoho Corporation | Aug 2022 – Present</p>
-                            <ul id="experience-list-mts" class="space-y-3 list-inside">
-                                <li data-category="Security" class="list-item-default p-4 rounded-lg transition-all duration-300">Architected and integrated Role-Based Access Control (RBAC) and server-side SQL validation, eliminating 95% of unauthorized data access and successfully remediating critical vulnerabilities, including <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-40772" target="_blank" rel="noopener noreferrer" class="cve-link">CVE-2022-40772</a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-26600" target="_blank" rel="noopener noreferrer" class="cve-link">CVE-2023-26600</a>.</li>
-                                <li data-category="Performance" class="list-item-default p-4 rounded-lg transition-all duration-300">Optimized the core reporting engine by upgrading JasperReports, implementing column-level caching, and migrating bulky data formats to JSON, resulting in a 30–40% improvement in report generation time.</li>
-                                <li data-category="Feature Development" class="list-item-default p-4 rounded-lg transition-all duration-300">Developed a custom SQL query transformer to enable dynamic reporting with hyperlink columns and filters, reducing report configuration time by 40% and streamlining schema migration efforts by 70%.</li>
-                                <li data-category="Security" class="list-item-default p-4 rounded-lg transition-all duration-300">Enhanced data security by enforcing read-only restrictions on 75+ sensitive tables and implementing server-side SQL validation, blocking 95% of malicious queries before execution and reducing audit findings by 30%.</li>
-                                <li data-category="Troubleshooting" class="list-item-default p-4 rounded-lg transition-all duration-300">Resolved 280+ critical technical issues, including 150+ security vulnerabilities and 20+ performance bottlenecks, significantly enhancing application stability and system performance.</li>
-                                <li data-category="Feature Development" class="list-item-default p-4 rounded-lg transition-all duration-300">Debugged and resolved critical failures in scheduled reports by identifying root causes (e.g., PhantomJS deprecation) and implementing Puppeteer as a robust, modern alternative.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-[var(--text-primary)]">Project Trainee</h3>
-                            <p class="text-md font-medium text-[var(--text-secondary)] mb-4">Zoho Corporation | Dec 2021 – Aug 2022</p>
-                            <ul id="experience-list-trainee" class="space-y-3 list-inside">
-                                <li data-category="Performance" class="list-item-default p-4 rounded-lg transition-all duration-300">Optimized PostgreSQL queries and improved indexing efficiency across key modules, reducing average database response time by 35%.</li>
-                                <li data-category="Security" class="list-item-default p-4 rounded-lg transition-all duration-300">Secured internal modules by analyzing and patching 10+ vulnerability patterns (XSS, SQL Injection) and addressing 5+ critical threat vectors, including LDAP Injection, XSSI, and RCE, ensuring zero recurrence post-resolution.</li>
-                                <li data-category="Troubleshooting" class="list-item-default p-4 rounded-lg transition-all duration-300">Collaborated with cross-functional teams to resolve database storage issues, reducing data access failures by 25% and ensuring 100% data consistency.</li>
-                            </ul>
-                        </div>
+                <div class="experience-details">
+                    <div>
+                        <h3>Member Technical Staff</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Zoho Corporation | Aug 2022 – Present</p>
+                        <ul class="experience-list">
+                            <li data-category="Security">Architected and integrated Role-Based Access Control (RBAC) and server-side SQL validation, eliminating 95% of unauthorized data access and successfully remediating critical vulnerabilities, including <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-40772" target="_blank" rel="noopener noreferrer" class="cve-link">CVE-2022-40772</a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-26600" target="_blank" rel="noopener noreferrer" class="cve-link">CVE-2023-26600</a>.</li>
+                            <li data-category="Performance">Optimized the core reporting engine by upgrading JasperReports, implementing column-level caching, and migrating bulky data formats to JSON, resulting in a 30–40% improvement in report generation time.</li>
+                            <li data-category="Feature Development">Developed a custom SQL query transformer to enable dynamic reporting with hyperlink columns and filters, reducing report configuration time by 40% and streamlining schema migration efforts by 70%.</li>
+                            <li data-category="Security">Enhanced data security by enforcing read-only restrictions on 75+ sensitive tables and implementing server-side SQL validation, blocking 95% of malicious queries before execution and reducing audit findings by 30%.</li>
+                            <li data-category="Troubleshooting">Resolved 280+ critical technical issues, including 150+ security vulnerabilities and 20+ performance bottlenecks, significantly enhancing application stability and system performance.</li>
+                            <li data-category="Feature Development">Debugged and resolved critical failures in scheduled reports by identifying root causes (e.g., PhantomJS deprecation) and implementing Puppeteer as a robust, modern alternative.</li>
+                        </ul>
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h3>Project Trainee</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Zoho Corporation | Dec 2021 – Aug 2022</p>
+                        <ul class="experience-list">
+                            <li data-category="Performance">Optimized PostgreSQL queries and improved indexing efficiency across key modules, reducing average database response time by 35%.</li>
+                            <li data-category="Security">Secured internal modules by analyzing and patching 10+ vulnerability patterns (XSS, SQL Injection) and addressing 5+ critical threat vectors, including LDAP Injection, XSSI, and RCE, ensuring zero recurrence post-resolution.</li>
+                            <li data-category="Troubleshooting">Collaborated with cross-functional teams to resolve database storage issues, reducing data access failures by 25% and ensuring 100% data consistency.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="impact" class="mb-16 md:mb-24 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-center text-[var(--text-primary)] mb-2">Key Career Impacts</h2>
-            <p class="text-center text-[var(--text-secondary)] mb-10">Quantifiable results delivered through focused engineering efforts.</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center">
-                <div class="card p-6 rounded-lg">
-                    <p class="text-4xl font-extrabold" style="color: #ff7f50;">95%</p>
-                    <p class="text-sm font-medium text-slate-500 mt-2">Reduction in Unauthorized Data Access</p>
+        <section id="impact">
+            <h2>Key Career Impacts</h2>
+            <p class="section-subtitle">Quantifiable results delivered through focused engineering efforts.</p>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <p class="value" style="color: #ff7f50;">95%</p>
+                    <p class="label">Reduction in Unauthorized Data Access</p>
                 </div>
-                <div class="card p-6 rounded-lg">
-                    <p class="text-4xl font-extrabold" style="color: #87ceeb;">40%</p>
-                    <p class="text-sm font-medium text-slate-500 mt-2">Improvement in Report Generation Time</p>
+                <div class="impact-card">
+                    <p class="value" style="color: #87ceeb;">40%</p>
+                    <p class="label">Improvement in Report Generation Time</p>
                 </div>
-                <div class="card p-6 rounded-lg">
-                    <p class="text-4xl font-extrabold" style="color: #ff7f50;">70%</p>
-                    <p class="text-sm font-medium text-slate-500 mt-2">Reduction in Schema Migration Effort</p>
+                <div class="impact-card">
+                    <p class="value" style="color: #ff7f50;">70%</p>
+                    <p class="label">Reduction in Schema Migration Effort</p>
                 </div>
-                <div class="card p-6 rounded-lg">
-                    <p class="text-4xl font-extrabold" style="color: #87ceeb;">280+</p>
-                    <p class="text-sm font-medium text-slate-500 mt-2">Critical Technical Issues Resolved</p>
+                <div class="impact-card">
+                    <p class="value" style="color: #87ceeb;">280+</p>
+                    <p class="label">Critical Technical Issues Resolved</p>
                 </div>
             </div>
         </section>
 
-        <section id="skills" class="card p-8 rounded-lg shadow-sm mb-16 md:mb-24 pt-16 -mt-16">
-             <h2 class="text-3xl font-bold text-center text-[var(--text-primary)] mb-8">Technical Skillset</h2>
-             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <section id="skills" class="skills-card">
+            <h2>Technical Skillset</h2>
+            <div class="skills-grid" style="margin-top: 2.5rem;">
                 <div>
-                    <h3 class="text-xl font-bold text-[var(--text-primary)] mb-3">Languages</h3>
-                    <div class="flex flex-wrap gap-2">
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Java</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">SQL</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Python</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">C</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">JavaScript</span>
+                    <h3>Languages</h3>
+                    <div class="skills-tags">
+                        <span class="skill-tag">Java</span><span class="skill-tag">SQL</span><span class="skill-tag">Python</span><span class="skill-tag">C</span><span class="skill-tag">JavaScript</span>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold text-[var(--text-primary)] mb-3">Databases & Core Skills</h3>
-                    <div class="flex flex-wrap gap-2">
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">PostgreSQL</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">SQL Server</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">DSA</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">OOP</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Performance Tuning</span>
+                    <h3>Databases & Core Skills</h3>
+                    <div class="skills-tags">
+                        <span class="skill-tag">PostgreSQL</span><span class="skill-tag">SQL Server</span><span class="skill-tag">DSA</span><span class="skill-tag">OOP</span><span class="skill-tag">Performance Tuning</span>
                     </div>
                 </div>
-                 <div>
-                    <h3 class="text-xl font-bold text-[var(--text-primary)] mb-3">Frameworks & Tools</h3>
-                    <div class="flex flex-wrap gap-2">
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">JasperReports</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Puppeteer</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Ember.js</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">REST APIs</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Git</span>
-                         <span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium px-3 py-1 rounded-full">NGINX</span>
+                <div>
+                    <h3>Frameworks & Tools</h3>
+                    <div class="skills-tags">
+                        <span class="skill-tag">JasperReports</span><span class="skill-tag">Puppeteer</span><span class="skill-tag">Ember.js</span><span class="skill-tag">REST APIs</span><span class="skill-tag">Git</span><span class="skill-tag">NGINX</span>
                     </div>
                 </div>
-             </div>
+            </div>
         </section>
     </main>
 
-    <footer class="bg-[var(--bg-secondary)] mt-16 md:mt-24 border-t border-[var(--border-color)]">
-        <div class="container mx-auto px-6 py-8 text-center text-[var(--text-secondary)]">
-             <p class="text-lg font-bold text-[var(--text-primary)] mb-2">Contact Me</p>
-             <p>saranthanigaivel@gmail.com</p>
-             <div class="mt-4">
-                <p>&copy; 2024 Saran Thanigaivel.</p>
-             </div>
+    <footer class="footer">
+        <div class="container">
+            <p class="contact-me">Contact Me</p>
+            <p>saranthanigaivel@gmail.com</p>
+            <p style="margin-top: 1rem;">&copy; 2024 Saran Thanigaivel.</p>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const themeToggleBtn = document.getElementById('theme-toggle');
-            const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+            const mobileMenuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
             const darkIcon = document.getElementById('theme-toggle-dark-icon');
             const lightIcon = document.getElementById('theme-toggle-light-icon');
-            const darkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
-            const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
             const achievementsChartCtx = document.getElementById('achievementsChart').getContext('2d');
             let achievementsChart;
 
@@ -247,150 +382,94 @@
                 datasets: [{
                     label: 'Achievement Focus',
                     data: [3, 2, 2, 2],
-                    backgroundColor: [
-                        '#a1a1aa',   // Gray
-                        '#87ceeb',   // Sky Blue
-                        '#ff7f50',   // Sunset Orange
-                        '#d4d4d8'    // Light Gray
-                    ],
-                    highlightTextColor: [
-                        '#ffffff',   // White text on Gray
-                        '#1e293b',   // Dark text on Sky Blue
-                        '#ffffff',   // White text on Sunset Orange
-                        '#1e293b'    // Dark text on Light Gray
-                    ],
+                    backgroundColor: ['#a1a1aa', '#87ceeb', '#ff7f50', '#d4d4d8'],
+                    highlightTextColor: ['#ffffff', '#1e293b', '#ffffff', '#1e293b'],
                     borderWidth: 4,
                 }]
             };
 
-            const createOrUpdateChart = () => {
-                const isDark = document.documentElement.classList.contains('dark');
-                const chartBorderColor = getComputedStyle(document.documentElement).getPropertyValue('--chart-border').trim();
-                const legendColor = isDark ? '#94a3b8' : '#475569';
-
-                achievementsData.datasets[0].borderColor = chartBorderColor;
+            function updateChartTheme() {
+                const isDark = document.body.classList.contains('dark-mode');
+                const chartBorderColor = isDark ? '#1a1410' : '#fdf6f0';
+                const legendColor = isDark ? '#a8a29e' : '#475569';
 
                 const chartOptions = {
                     responsive: true,
                     maintainAspectRatio: false,
                     cutout: '60%',
                     plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                color: legendColor,
-                                font: { size: 14, family: 'Inter' }
-                            }
-                        },
-                        tooltip: {
-                            bodyFont: { size: 14, family: 'Inter' },
-                            titleFont: { size: 16, family: 'Inter' },
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) { label += ': '; }
-                                    if (context.parsed !== null) { label += `${context.raw} achievements`; }
-                                    return label;
-                                }
-                            }
-                        }
+                        legend: { position: 'bottom', labels: { padding: 20, color: legendColor, font: { size: 14 } } },
+                        tooltip: { bodyFont: { size: 14 }, titleFont: { size: 16 } }
                     }
                 };
 
                 if (achievementsChart) {
-                    achievementsChart.options = chartOptions;
-                    achievementsChart.data.datasets[0].borderColor = chartBorderColor;
-                    achievementsChart.update();
-                } else {
-                    achievementsChart = new Chart(achievementsChartCtx, {
-                        type: 'doughnut',
-                        data: achievementsData,
-                        options: chartOptions
-                    });
+                    achievementsChart.destroy();
                 }
-            };
-            
-            const updateChartTheme = () => {
-                createOrUpdateChart();
+                achievementsData.datasets[0].borderColor = chartBorderColor;
+                achievementsChart = new Chart(achievementsChartCtx, { type: 'doughnut', data: achievementsData, options: chartOptions });
             };
 
-            const applyTheme = (theme) => {
+            function applyTheme(theme) {
                 if (theme === 'dark') {
-                    document.documentElement.classList.add('dark');
+                    document.body.classList.add('dark-mode');
                     darkIcon.classList.remove('hidden');
                     lightIcon.classList.add('hidden');
-                    darkIconMobile.classList.remove('hidden');
-                    lightIconMobile.classList.add('hidden');
                 } else {
-                    document.documentElement.classList.remove('dark');
+                    document.body.classList.remove('dark-mode');
                     darkIcon.classList.add('hidden');
                     lightIcon.classList.remove('hidden');
-                    darkIconMobile.classList.add('hidden');
-                    lightIconMobile.classList.remove('hidden');
                 }
-                updateChartTheme(theme);
+                updateChartTheme();
             };
 
-            const toggleTheme = () => {
-                const isDarkMode = document.documentElement.classList.toggle('dark');
-                const newTheme = isDarkMode ? 'dark' : 'light';
+            function toggleTheme() {
+                const newTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
                 localStorage.setItem('theme', newTheme);
                 applyTheme(newTheme);
             };
 
             themeToggleBtn.addEventListener('click', toggleTheme);
-            themeToggleMobileBtn.addEventListener('click', toggleTheme);
-
-            const savedTheme = localStorage.getItem('theme');
-            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-            if (savedTheme) {
-                applyTheme(savedTheme);
-            } else {
-                applyTheme(systemPrefersDark ? 'dark' : 'light');
-            }
-
-            const experienceItems = document.querySelectorAll('#experience-list-mts li, #experience-list-trainee li');
-            const resetButton = document.getElementById('reset-filter');
-            const chartHelper = document.getElementById('chart-helper');
             
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(savedTheme);
+
+            mobileMenuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.style.display === 'none' || mobileMenu.style.display === '';
+                mobileMenu.style.display = isHidden ? 'block' : 'none';
+            });
+
+            const experienceItems = document.querySelectorAll('.experience-list li');
+            const resetButton = document.getElementById('reset-filter');
             let activeFilter = null;
 
             function filterAchievements(category, color, textColor) {
                 activeFilter = category;
                 experienceItems.forEach(item => {
-                    const defaultClasses = 'list-item-default p-4 rounded-lg transition-all duration-300';
                     if (item.dataset.category === category) {
-                        item.className = 'p-4 rounded-lg transition-all duration-300';
                         item.style.backgroundColor = color;
                         item.style.borderColor = color;
                         item.style.color = textColor;
-                        item.style.transform = 'scale(1.01)';
+                        item.style.transform = 'scale(1.02)';
                     } else {
-                        item.className = defaultClasses;
                         item.style.backgroundColor = '';
                         item.style.borderColor = '';
                         item.style.color = '';
                         item.style.transform = '';
                     }
                 });
-                resetButton.classList.remove('hidden');
-                chartHelper.textContent = `Showing achievements for: ${category}`;
+                resetButton.style.display = 'block';
             }
 
             function resetFilter() {
                 activeFilter = null;
-                const defaultClasses = 'list-item-default p-4 rounded-lg transition-all duration-300';
                 experienceItems.forEach(item => {
-                    item.className = defaultClasses;
                     item.style.backgroundColor = '';
                     item.style.borderColor = '';
                     item.style.color = '';
                     item.style.transform = '';
                 });
-                resetButton.classList.add('hidden');
-                chartHelper.textContent = 'Click a segment to highlight related achievements.';
+                resetButton.style.display = 'none';
             }
 
             document.getElementById('achievementsChart').onclick = (evt) => {
@@ -400,7 +479,6 @@
                     const label = achievementsChart.data.labels[firstPoint.index];
                     const color = achievementsChart.data.datasets[0].backgroundColor[firstPoint.index];
                     const textColor = achievementsChart.data.datasets[0].highlightTextColor[firstPoint.index];
-
                     if (activeFilter === label) {
                         resetFilter();
                     } else {
@@ -410,31 +488,6 @@
             };
             
             resetButton.addEventListener('click', resetFilter);
-
-            const menuBtn = document.getElementById('menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            const allNavLinks = document.querySelectorAll('header nav a, #mobile-menu a');
-
-            allNavLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-
-                    if (href && href.startsWith('#')) {
-                        e.preventDefault();
-                        const targetElement = document.querySelector(href);
-                        if (targetElement) {
-                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                        if (!mobileMenu.classList.contains('hidden')) {
-                            mobileMenu.classList.add('hidden');
-                        }
-                    }
-                });
-            });
         });
     </script>
 </body>
